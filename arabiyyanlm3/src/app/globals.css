@@ -1,0 +1,145 @@
+@import "tailwindcss";
+
+:root {
+  --background: #0a0b0a;
+  --surface: #101210;
+  --foreground: #eef1ec;
+  --muted: #8b948a;
+  --muted-dim: #565e57;
+  --hairline: #24261f;
+  --emerald: #22a06b;
+  --emerald-glow: #3ecf8e;
+  --emerald-dim: #0e2e21;
+  --danger: #c96a5a;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-muted-dim: var(--muted-dim);
+  --color-hairline: var(--hairline);
+  --color-emerald: var(--emerald);
+  --color-emerald-glow: var(--emerald-glow);
+  --color-emerald-dim: var(--emerald-dim);
+  --color-danger: var(--danger);
+  --font-arabic: "Amiri Quran", "Amiri", "Traditional Arabic", serif;
+  --font-sans: "Manrope", ui-sans-serif, system-ui, sans-serif;
+}
+
+* {
+  border-color: var(--hairline);
+}
+
+html {
+  color-scheme: dark;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+}
+
+.font-arabic {
+  font-family: var(--font-arabic);
+  direction: rtl;
+}
+
+/* Subtle scrollbar so it doesn't fight the quiet aesthetic */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--hairline);
+  border-radius: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* ---------------------------------------------------------------------
+   Shared interaction language.
+   One small, consistent system so the whole app teaches the same rule:
+   "if it responds when I hover/press it, I can interact with it."
+   Applied via className on top of each element's existing styling —
+   no component's layout, colour scheme, or structure changes.
+--------------------------------------------------------------------- */
+
+/* Base: ordinary clickable elements (buttons, links, controls). */
+.interactive {
+  cursor: pointer;
+  transition: transform 150ms ease, filter 150ms ease, box-shadow 150ms ease;
+}
+.interactive:hover {
+  transform: scale(1.03);
+  filter: brightness(1.18);
+}
+.interactive:active {
+  transform: scale(0.97);
+  filter: brightness(1.05);
+}
+
+/* Stronger version for the few large, primary elements — the home-screen
+   lesson book and the wordmark. Same idea, slightly more presence. */
+.interactive-lg {
+  cursor: pointer;
+  transition: transform 220ms ease, filter 220ms ease;
+}
+.interactive-lg:hover {
+  transform: scale(1.035);
+  filter: brightness(1.12) drop-shadow(0 0 16px var(--emerald-dim));
+}
+.interactive-lg:active {
+  transform: scale(0.99);
+}
+
+/* For quiet text buttons/links whose colour is normally driven by an
+   inline style reflecting app state (active tab, selected speed, etc).
+   The !important is deliberate and scoped to this one class only: it
+   lets a hover state win over that inline colour without rewriting each
+   caller's state-colour logic into CSS classes. */
+.hover-emerald:hover {
+  color: var(--emerald-glow) !important;
+}
+
+/* Full-width list rows (the lesson path): a scale effect looks odd on a
+   wide row, so hover feedback here is a soft background highlight instead. */
+.list-row {
+  transition: background-color 160ms ease, padding-inline 160ms ease;
+  border-radius: 8px;
+}
+.list-row:hover {
+  background-color: var(--emerald-dim);
+  padding-inline: 0.75rem;
+}
+
+/* Tappable Arabic sentence blocks in the Overview (page 3) and similar
+   "click this whole block to play" areas — a soft highlight on hover. */
+.sentence-tap {
+  transition: background-color 150ms ease;
+  border-radius: 0.5rem;
+}
+.sentence-tap:hover {
+  background-color: var(--emerald-dim);
+}
+
+/* Consistent keyboard focus ring using the accent colour, replacing the
+   default browser outline without losing accessibility. */
+:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--background), 0 0 0 4px var(--emerald);
+  border-radius: 6px;
+}
